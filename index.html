@@ -3,432 +3,494 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
     <!-- Add Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
+    <!-- Include AOS for animations -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
     <style>
-      body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #ffffff; /* Set background to white */
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-  
-      /* Custom button styles */
-      .btn {
-        @apply bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out;
-      }
-  
-      .btn:hover {
-        @apply bg-blue-600 shadow-lg;
-      }
-  
-      /* Input field styles */
-      input[type="text"], input[type="number"] {
-        @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
-      }
-  
-      /* Container styles */
-      #container {
-        @apply border-2 border-gray-300 bg-white rounded-lg shadow-lg;
-        height: 75vh; /* Allow the container to take up more vertical space */
-        width: 100%; /* Take up full width */
-        overflow: hidden;
-      }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-section {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 1) 0%, rgba(91, 33, 182, 1) 100%);
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-text {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtext {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-cta {
+            background-color: #FFD700;
+            color: #1C3A72;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        #container {
+            border: 2px solid #D1D5DB;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 75vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Custom file upload button styles */
+        .file-upload-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-upload-btn {
+            background-color: #3B82F6;
+            /* Tailwind's blue-500 */
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Add transition */
+            border: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #60A5FA;
+            /* Tailwind's blue-400 for lighter hover */
+            transform: scale(1.05);
+            /* Add scale effect */
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: none;
+            /* Completely hide the actual file input */
+        }
     </style>
-  </head>
-  <body>
-  
-    <div class="p-5">
-      <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Upload Floor Plan & Set Scale</h1>
-      
-      <!-- Upload Button -->
-      <div class="flex justify-center mb-6">
-        <input type="file" id="uploadBtn" class="btn cursor-pointer" accept="image/*" />
-      </div>
-  
-      <!-- Floor Plan Container -->
-      <div id="container" class="flex justify-center items-center mb-6"></div>
-      
-      <!-- Scale Controls -->
-      <div id="scaleControls" class="mt-4 bg-white p-4 rounded-lg shadow-lg hidden">
-        <p class="text-lg font-semibold mb-2">Draw a line on the image to set the scale.</p>
-        <div class="flex space-x-4">
-          <label for="lineLength" class="flex items-center">
-            <span class="mr-2">Line length (meters):</span>
-            <input type="number" id="lineLength" class="w-24" step="0.01" placeholder="e.g. 5">
-          </label>
-          <button id="setScaleBtn" class="btn">Set Scale</button>
-        </div>
-      </div>
-  
-      <!-- Furniture Controls -->
-      <div id="controls" class="mt-4 bg-white p-4 rounded-lg shadow-lg hidden">
-        <div class="flex flex-wrap space-x-4 items-center">
-          <label for="furnitureName" class="flex items-center">
-            <span class="mr-2">Name:</span>
-            <input type="text" id="furnitureName" class="w-48" placeholder="e.g. Sofa">
-          </label>
-          <label for="furnitureWidth" class="flex items-center">
-            <span class="mr-2">Width (meters):</span>
-            <input type="number" id="furnitureWidth" class="w-24" step="0.1" placeholder="e.g. 2">
-          </label>
-          <label for="furnitureHeight" class="flex items-center">
-            <span class="mr-2">Height (meters):</span>
-            <input type="number" id="furnitureHeight" class="w-24" step="0.1" placeholder="e.g. 1">
-          </label>
-          <button id="addFurnitureBtn" class="btn">Add Furniture</button>
-        </div>
-      </div>
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <div class="hero-section" data-aos="fade-in">
+        <h1 class="hero-text">Design Your Space with Ease</h1>
+        <p class="hero-subtext">Upload your floor plan and start planning your dream interior.</p>
+        <button id="startBtn" class="btn-cta">Get Started</button>
     </div>
-  
+
+    <!-- Content Section (hidden initially) -->
+    <div class="content-section">
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Upload Floor Plan & Set Scale</h1>
+
+        <!-- Custom File Upload Button -->
+        <div class="flex justify-center mb-6">
+            <div class="file-upload-wrapper">
+                <label for="uploadBtn" class="file-upload-btn">Upload Floor Plan</label>
+                <input type="file" id="uploadBtn" accept="image/*">
+            </div>
+        </div>
+
+        <!-- Floor Plan Container -->
+        <div id="container" class="flex justify-center items-center mb-6"></div>
+
+        <!-- Scale Controls -->
+        <div id="scaleControls" class="mt-4 bg-white p-4 rounded-lg shadow-lg hidden">
+            <p class="text-lg font-semibold mb-2">Draw a line on the image to set the scale.</p>
+            <div class="flex space-x-4">
+                <label for="lineLength" class="flex items-center">
+                    <span class="mr-2">Line length (meters):</span>
+                    <input type="number" id="lineLength" class="w-24" step="0.01" placeholder="e.g. 5">
+                </label>
+                <button id="setScaleBtn" class="btn">Set Scale</button>
+            </div>
+        </div>
+
+        <!-- Furniture Controls -->
+        <div id="controls" class="mt-4 bg-white p-4 rounded-lg shadow-lg hidden">
+            <div class="flex flex-wrap space-x-4 items-center">
+                <label for="furnitureName" class="flex items-center">
+                    <span class="mr-2">Name:</span>
+                    <input type="text" id="furnitureName" class="w-48" placeholder="e.g. Sofa">
+                </label>
+                <label for="furnitureWidth" class="flex items-center">
+                    <span class="mr-2">Width (meters):</span>
+                    <input type="number" id="furnitureWidth" class="w-24" step="0.1" placeholder="e.g. 2">
+                </label>
+                <label for="furnitureHeight" class="flex items-center">
+                    <span class="mr-2">Height (meters):</span>
+                    <input type="number" id="furnitureHeight" class="w-24" step="0.1" placeholder="e.g. 1">
+                </label>
+                <button id="addFurnitureBtn" class="btn">Add Furniture</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Include Konva.js from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/konva@9.0.1/konva.min.js"></script>
-  
+    <!-- Include AOS for animations -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
     <script>
-      const uploadBtn = document.getElementById('uploadBtn');
-      const container = document.getElementById('container');
-      const addFurnitureBtn = document.getElementById('addFurnitureBtn');
-      const furnitureNameInput = document.getElementById('furnitureName');
-      const furnitureWidthInput = document.getElementById('furnitureWidth');
-      const furnitureHeightInput = document.getElementById('furnitureHeight');
-      const controls = document.getElementById('controls');
-      const scaleControls = document.getElementById('scaleControls');
-      const lineLengthInput = document.getElementById('lineLength');
-      const setScaleBtn = document.getElementById('setScaleBtn');
-  
-      let stage, layer, konvaImage;
-      let scaleFactor = null;  // Scale factor (pixels per meter)
-      let line, startPoint, endPoint;
-      let selectedFurniture = null;
-      let copiedFurniture = null; // Store the copied furniture data
-  
-      // Handle file upload
-      uploadBtn.addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (file) {
-              const reader = new FileReader();
-              reader.onload = function(e) {
-                  const imageObj = new Image();
-                  imageObj.onload = function() {
-                      // Adjust the scaling logic to maximize image size within the container
-                      const containerHeight = container.clientHeight;
-                      const containerWidth = container.clientWidth;
-                      const aspectRatio = imageObj.width / imageObj.height;
-  
-                      let scaledWidth, scaledHeight;
-  
-                      if (imageObj.width > imageObj.height) {
-                          scaledWidth = containerWidth;
-                          scaledHeight = containerWidth / aspectRatio;
-                          if (scaledHeight > containerHeight) {
-                              scaledHeight = containerHeight;
-                              scaledWidth = containerHeight * aspectRatio;
-                          }
-                      } else {
-                          scaledHeight = containerHeight;
-                          scaledWidth = containerHeight * aspectRatio;
-                          if (scaledWidth > containerWidth) {
-                              scaledWidth = containerWidth;
-                              scaledHeight = containerWidth / aspectRatio;
-                          }
-                      }
-  
-                      // If stage and layer exist, destroy them before creating new ones
-                      if (stage) {
-                          stage.destroy();
-                      }
-  
-                      stage = new Konva.Stage({
-                          container: 'container',
-                          width: scaledWidth,
-                          height: scaledHeight,
-                      });
-  
-                      layer = new Konva.Layer();
-                      stage.add(layer);
-  
-                      // Add the image to the layer with scaled dimensions
-                      konvaImage = new Konva.Image({
-                          x: 0,
-                          y: 0,
-                          image: imageObj,
-                          width: scaledWidth,
-                          height: scaledHeight,
-                      });
-  
-                      layer.add(konvaImage);
-                      layer.draw();
-  
-                      // Show the scale controls after the image is loaded
-                      scaleControls.style.display = 'block';
-                      controls.style.display = 'none';
-  
-                      // Enable drawing of the scale line
-                      enableScaleDrawing();
-  
-                      // Add event listener for stage clicks to deselect furniture
-                      stage.on('click', (e) => {
-                          if (selectedFurniture) {
-                              selectedFurniture.rect.fill('rgba(0, 128, 0, 0.5)');
-                              selectedFurniture = null;
-                              layer.draw();
-                          }
-                      });
-                  };
-                  imageObj.src = e.target.result;
-              };
-              reader.readAsDataURL(file);
-          }
-      });
-  
-      // Function to enable drawing of the scale line
-      function enableScaleDrawing() {
-          let isDrawing = false;
-  
-          stage.on('mousedown touchstart', (e) => {
-              if (!scaleFactor) {
-                  isDrawing = true;
-                  const pos = stage.getPointerPosition();
-                  startPoint = pos;
-                  if (line) {
-                      line.destroy();
-                  }
-                  line = new Konva.Line({
-                      points: [startPoint.x, startPoint.y],
-                      stroke: 'red',
-                      strokeWidth: 2,
-                      lineCap: 'round',
-                      lineJoin: 'round',
-                  });
-                  layer.add(line);
-              }
-          });
-  
-          stage.on('mousemove touchmove', (e) => {
-              if (isDrawing && !scaleFactor) {
-                  const pos = stage.getPointerPosition();
-                  line.points([startPoint.x, startPoint.y, pos.x, pos.y]);
-                  layer.draw();
-              }
-          });
-  
-          stage.on('mouseup touchend', (e) => {
-              if (isDrawing && !scaleFactor) {
-                  isDrawing = false;
-                  endPoint = stage.getPointerPosition();
-              }
-          });
-      }
-  
-      // Set the scale based on the drawn line and input distance
-      setScaleBtn.addEventListener('click', () => {
-          const lineLengthMeters = parseFloat(lineLengthInput.value);
-          if (isNaN(lineLengthMeters) || !startPoint || !endPoint) {
-              alert("Please draw a line and enter a valid distance in meters.");
-              return;
-          }
-  
-          // Calculate the pixel distance between the start and end points
-          const pixelDistance = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
-  
-          // Calculate the scale factor (pixels per meter)
-          scaleFactor = pixelDistance / lineLengthMeters;
-  
-          // Remove the red line used for setting the scale
-          if (line) {
-              line.destroy();
-              layer.draw();
-          }
-  
-          // Hide the scale controls and show the furniture controls
-          scaleControls.style.display = 'none';
-          controls.style.display = 'block';
-      });
-  
-      // Add furniture with specific size in meters and display its name
-      addFurnitureBtn.addEventListener('click', () => {
-          if (!scaleFactor) {
-              alert("Please set the scale first.");
-              return;
-          }
-  
-          const furnitureName = furnitureNameInput.value.trim();
-          const furnitureWidthMeters = parseFloat(furnitureWidthInput.value);
-          const furnitureHeightMeters = parseFloat(furnitureHeightInput.value);
-  
-          if (isNaN(furnitureWidthMeters) || isNaN(furnitureHeightMeters)) {
-              alert("Please enter valid furniture dimensions.");
-              return;
-          }
-  
-          // Convert meters to pixels based on scale factor
-          const furnitureWidthPixels = furnitureWidthMeters * scaleFactor;
-          const furnitureHeightPixels = furnitureHeightMeters * scaleFactor;
-  
-          // Create a rectangle representing the furniture
-          const rect = new Konva.Rect({
-              x: stage.width() / 2 - furnitureWidthPixels / 2,
-              y: stage.height() / 2 - furnitureHeightPixels / 2,
-              width: furnitureWidthPixels,
-              height: furnitureHeightPixels,
-              fill: 'rgba(0, 128, 0, 0.5)',
-              stroke: 'black',
-              strokeWidth: 1,
-              draggable: true,
-          });
-  
-          let text = null;
-          if (furnitureName) {
-              // Create a text element to display the furniture name
-              text = new Konva.Text({
-                  x: rect.x(),
-                  y: rect.y(),
-                  text: furnitureName,
-                  fontSize: 14,
-                  fontFamily: 'Arial',
-                  fill: 'black',
-                  width: rect.width(),
-                  align: 'center',
-                  verticalAlign: 'middle',
-              });
-  
-              // Ensure the text stays behind the rectangle
-              text.zIndex(-1);
-  
-              // Adjust text position to always stay centered
-              rect.on('dragmove', () => {
-                  text.position({
-                      x: rect.x(),
-                      y: rect.y() + rect.height() / 2 - text.height() / 2,
-                  });
-                  layer.batchDraw();
-              });
-  
-              text.on('click dragstart', (e) => {
-                  e.cancelBubble = true;
-              });
-  
-              // Initial positioning of the text
-              text.position({
-                  x: rect.x(),
-                  y: rect.y() + rect.height() / 2 - text.height() / 2,
-              });
-  
-              // Add the text to the layer
-              layer.add(text);
-          }
-  
-          // Add event listeners for highlighting and selecting the furniture
-          rect.on('click dragstart', (e) => {
-              // Prevent deselection by stopping event propagation when clicking on the rectangle
-              e.cancelBubble = true;
-  
-              if (selectedFurniture) {
-                  selectedFurniture.rect.fill('rgba(0, 128, 0, 0.5)');
-              }
-              rect.fill('rgba(0, 255, 0, 0.7)');
-              selectedFurniture = { rect, text };
-              layer.draw();
-          });
-  
-          // Add the rectangle to the layer
-          layer.add(rect);
-          layer.draw();
-      });
-  
-      // Handle deleting, copying, and pasting selected furniture
-      window.addEventListener('keydown', (e) => {
-          if (selectedFurniture) {
-              if (e.key === 'Backspace') {
-                  // Delete
-                  selectedFurniture.rect.destroy();
-                  if (selectedFurniture.text) {
-                      selectedFurniture.text.destroy();
-                  }
-                  layer.draw();
-                  selectedFurniture = null;
-              } else if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
-                  // Copy
-                  copiedFurniture = {
-                      name: selectedFurniture.text ? selectedFurniture.text.text() : "",
-                      width: selectedFurniture.rect.width(),
-                      height: selectedFurniture.rect.height(),
-                      x: selectedFurniture.rect.x(),
-                      y: selectedFurniture.rect.y(),
-                  };
-              } else if (e.key === 'v' && (e.ctrlKey || e.metaKey) && copiedFurniture) {
-                  // Paste
-                  const newRect = new Konva.Rect({
-                      x: copiedFurniture.x + 20, // Offset position slightly
-                      y: copiedFurniture.y + 20, // Offset position slightly
-                      width: copiedFurniture.width,
-                      height: copiedFurniture.height,
-                      fill: 'rgba(0, 128, 0, 0.5)',
-                      stroke: 'black',
-                      strokeWidth: 1,
-                      draggable: true,
-                  });
-  
-                  let newText = null;
-                  if (copiedFurniture.name) {
-                      newText = new Konva.Text({
-                          x: newRect.x(),
-                          y: newRect.y(),
-                          text: copiedFurniture.name,
-                          fontSize: 14,
-                          fontFamily: 'Arial',
-                          fill: 'black',
-                          width: newRect.width(),
-                          align: 'center',
-                          verticalAlign: 'middle',
-                      });
-  
-                      // Ensure the text stays behind the rectangle
-                      newText.zIndex(-1);
-  
-                      // Adjust text position to always stay centered
-                      newRect.on('dragmove', () => {
-                          newText.position({
-                              x: newRect.x(),
-                              y: newRect.y() + newRect.height() / 2 - newText.height() / 2,
-                          });
-                          layer.batchDraw();
-                      });
-  
-                      newText.on('click dragstart', (e) => {
-                          e.cancelBubble = true;
-                      });
-  
-                      // Initial positioning of the text
-                      newText.position({
-                          x: newRect.x(),
-                          y: newRect.y() + newRect.height() / 2 - newText.height() / 2,
-                      });
-  
-                      // Add the new text to the layer
-                      layer.add(newText);
-                  }
-  
-                  // Add event listeners for highlighting and selecting the new furniture
-                  newRect.on('click dragstart', (e) => {
-                      e.cancelBubble = true;
-  
-                      if (selectedFurniture) {
-                          selectedFurniture.rect.fill('rgba(0, 128, 0, 0.5)');
-                      }
-                      newRect.fill('rgba(0, 255, 0, 0.7)');
-                      selectedFurniture = { rect: newRect, text: newText };
-                      layer.draw();
-                  });
-  
-                  // Add the new rectangle to the layer
-                  layer.add(newRect);
-                  layer.draw();
-              }
-          }
-      });
+        // Initialize AOS (Animate on Scroll)
+        AOS.init();
+
+        const startBtn = document.getElementById('startBtn');
+        const contentSection = document.querySelector('.content-section');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const container = document.getElementById('container');
+        const addFurnitureBtn = document.getElementById('addFurnitureBtn');
+        const furnitureNameInput = document.getElementById('furnitureName');
+        const furnitureWidthInput = document.getElementById('furnitureWidth');
+        const furnitureHeightInput = document.getElementById('furnitureHeight');
+        const controls = document.getElementById('controls');
+        const scaleControls = document.getElementById('scaleControls');
+        const lineLengthInput = document.getElementById('lineLength');
+        const setScaleBtn = document.getElementById('setScaleBtn');
+
+        let stage, layer, konvaImage;
+        let scaleFactor = null;  // Scale factor (pixels per meter)
+        let line, startPoint, endPoint;
+        let selectedFurniture = null;
+        let copiedFurniture = null; // Store the copied furniture data
+
+        // Show the content section when the "Get Started" button is clicked
+        startBtn.addEventListener('click', function () {
+            document.querySelector('.hero-section').style.display = 'none';
+            contentSection.style.display = 'block';
+            contentSection.classList.add('fade-in');
+        });
+
+        // Handle file upload
+        uploadBtn.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imageObj = new Image();
+                    imageObj.onload = function () {
+                        const containerHeight = container.clientHeight;
+                        const containerWidth = container.clientWidth;
+                        const aspectRatio = imageObj.width / imageObj.height;
+
+                        let scaledWidth, scaledHeight;
+
+                        if (imageObj.width > imageObj.height) {
+                            scaledWidth = containerWidth;
+                            scaledHeight = containerWidth / aspectRatio;
+                            if (scaledHeight > containerHeight) {
+                                scaledHeight = containerHeight;
+                                scaledWidth = containerHeight * aspectRatio;
+                            }
+                        } else {
+                            scaledHeight = containerHeight;
+                            scaledWidth = containerHeight * aspectRatio;
+                            if (scaledWidth > containerWidth) {
+                                scaledWidth = containerWidth;
+                                scaledHeight = containerWidth / aspectRatio;
+                            }
+                        }
+
+                        if (stage) {
+                            stage.destroy();
+                        }
+
+                        stage = new Konva.Stage({
+                            container: 'container',
+                            width: scaledWidth,
+                            height: scaledHeight,
+                        });
+
+                        layer = new Konva.Layer();
+                        stage.add(layer);
+
+                        konvaImage = new Konva.Image({
+                            x: 0,
+                            y: 0,
+                            image: imageObj,
+                            width: scaledWidth,
+                            height: scaledHeight,
+                        });
+
+                        layer.add(konvaImage);
+                        layer.draw();
+
+                        scaleControls.style.display = 'block';
+                        controls.style.display = 'none';
+
+                        enableScaleDrawing();
+
+                        stage.on('click', (e) => {
+                            if (selectedFurniture) {
+                                selectedFurniture.rect.fill('#60A5FA'); // Change to a lighter blue when deselected
+                                selectedFurniture = null;
+                                layer.draw();
+                            }
+                        });
+                    };
+                    imageObj.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function enableScaleDrawing() {
+            let isDrawing = false;
+
+            stage.on('mousedown touchstart', (e) => {
+                if (!scaleFactor) {
+                    isDrawing = true;
+                    const pos = stage.getPointerPosition();
+                    startPoint = pos;
+                    if (line) {
+                        line.destroy();
+                    }
+                    line = new Konva.Line({
+                        points: [startPoint.x, startPoint.y],
+                        stroke: 'red',
+                        strokeWidth: 2,
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                    });
+                    layer.add(line);
+                }
+            });
+
+            stage.on('mousemove touchmove', (e) => {
+                if (isDrawing && !scaleFactor) {
+                    const pos = stage.getPointerPosition();
+                    line.points([startPoint.x, startPoint.y, pos.x, pos.y]);
+                    layer.draw();
+                }
+            });
+
+            stage.on('mouseup touchend', (e) => {
+                if (isDrawing && !scaleFactor) {
+                    isDrawing = false;
+                    endPoint = stage.getPointerPosition();
+                }
+            });
+        }
+
+        setScaleBtn.addEventListener('click', () => {
+            const lineLengthMeters = parseFloat(lineLengthInput.value);
+            if (isNaN(lineLengthMeters) || !startPoint || !endPoint) {
+                alert("Please draw a line and enter a valid distance in meters.");
+                return;
+            }
+
+            const pixelDistance = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
+
+            scaleFactor = pixelDistance / lineLengthMeters;
+
+            if (line) {
+                line.destroy();
+                layer.draw();
+            }
+
+            scaleControls.style.display = 'none';
+            controls.style.display = 'block';
+        });
+
+        addFurnitureBtn.addEventListener('click', () => {
+            if (!scaleFactor) {
+                alert("Please set the scale first.");
+                return;
+            }
+
+            const furnitureName = furnitureNameInput.value.trim();
+            const furnitureWidthMeters = parseFloat(furnitureWidthInput.value);
+            const furnitureHeightMeters = parseFloat(furnitureHeightInput.value);
+
+            if (isNaN(furnitureWidthMeters) || isNaN(furnitureHeightMeters)) {
+                alert("Please enter valid furniture dimensions.");
+                return;
+            }
+
+            const furnitureWidthPixels = furnitureWidthMeters * scaleFactor;
+            const furnitureHeightPixels = furnitureHeightMeters * scaleFactor;
+
+            const rect = new Konva.Rect({
+                x: stage.width() / 2 - furnitureWidthPixels / 2,
+                y: stage.height() / 2 - furnitureHeightPixels / 2,
+                width: furnitureWidthPixels,
+                height: furnitureHeightPixels,
+                fill: '#60A5FA', // Lighter blue color for furniture
+                stroke: 'black',
+                strokeWidth: 1,
+                draggable: true,
+            });
+
+            let text = null;
+            if (furnitureName) {
+                const maxFontSize = Math.min(furnitureWidthPixels / furnitureName.length * 2, furnitureHeightPixels * 0.8);
+                text = new Konva.Text({
+                    text: furnitureName,
+                    fontSize: maxFontSize,
+                    fontFamily: 'Arial',
+                    fill: 'white', // White text for visibility
+                    width: rect.width(),
+                    align: 'center',
+                    listening: false, // Disable event listening on the text
+                });
+
+                // Add the text to the layer after the rectangle
+                layer.add(rect);
+                layer.add(text);
+
+                // Set text position after adding to the layer
+                text.position({
+                    x: rect.x(),
+                    y: rect.y() + (rect.height() - text.height()) / 2,
+                });
+
+                // Adjust text position as the rectangle moves
+                rect.on('dragmove', () => {
+                    text.position({
+                        x: rect.x(),
+                        y: rect.y() + (rect.height() - text.height()) / 2,
+                    });
+                    layer.batchDraw();
+                });
+
+                text.on('click dragstart', (e) => {
+                    e.cancelBubble = true;
+                });
+            }
+
+            rect.on('click dragstart', (e) => {
+                e.cancelBubble = true;
+
+                if (selectedFurniture) {
+                    selectedFurniture.rect.fill('#60A5FA'); // Revert to lighter blue when deselected
+                }
+                rect.fill('#93C5FD'); // Brighter blue when selected
+                selectedFurniture = { rect, text };
+                layer.draw();
+            });
+
+            layer.draw();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (selectedFurniture) {
+                if (e.key === 'Backspace') {
+                    selectedFurniture.rect.destroy();
+                    if (selectedFurniture.text) {
+                        selectedFurniture.text.destroy();
+                    }
+                    layer.draw();
+                    selectedFurniture = null;
+                } else if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
+                    copiedFurniture = {
+                        name: selectedFurniture.text ? selectedFurniture.text.text() : "",
+                        width: selectedFurniture.rect.width(),
+                        height: selectedFurniture.rect.height(),
+                        x: selectedFurniture.rect.x(),
+                        y: selectedFurniture.rect.y(),
+                    };
+                } else if (e.key === 'v' && (e.ctrlKey || e.metaKey) && copiedFurniture) {
+                    const newRect = new Konva.Rect({
+                        x: copiedFurniture.x + 20,
+                        y: copiedFurniture.y + 20,
+                        width: copiedFurniture.width,
+                        height: copiedFurniture.height,
+                        fill: '#60A5FA', // Lighter blue color for copied furniture
+                        stroke: 'black',
+                        strokeWidth: 1,
+                        draggable: true,
+                    });
+
+                    let newText = null;
+                    if (copiedFurniture.name) {
+                        const maxFontSize = Math.min(newRect.width() / copiedFurniture.name.length * 2, newRect.height() * 0.8);
+                        newText = new Konva.Text({
+                            text: copiedFurniture.name,
+                            fontSize: maxFontSize,
+                            fontFamily: 'Arial',
+                            fill: 'white', // White text for visibility
+                            width: newRect.width(),
+                            align: 'center',
+                            listening: false, // Disable event listening on the text
+                        });
+
+                        // Add the text to the layer after the rectangle
+                        layer.add(newRect);
+                        layer.add(newText);
+
+                        // Set text position after adding to the layer
+                        newText.position({
+                            x: newRect.x(),
+                            y: newRect.y() + (newRect.height() - newText.height()) / 2,
+                        });
+
+                        newRect.on('dragmove', () => {
+                            newText.position({
+                                x: newRect.x(),
+                                y: newRect.y() + (newRect.height() - newText.height()) / 2,
+                            });
+                            layer.batchDraw();
+                        });
+
+                        newText.on('click dragstart', (e) => {
+                            e.cancelBubble = true;
+                        });
+                    }
+
+                    newRect.on('click dragstart', (e) => {
+                        e.cancelBubble = true;
+
+                        if (selectedFurniture) {
+                            selectedFurniture.rect.fill('#60A5FA'); // Revert to lighter blue when deselected
+                        }
+                        newRect.fill('#93C5FD'); // Brighter blue when selected
+                        selectedFurniture = { rect: newRect, text: newText };
+                        layer.draw();
+                    });
+
+                    layer.draw();
+                }
+            }
+        });
     </script>
 
-  </body>
+</body>

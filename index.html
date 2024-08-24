@@ -34,6 +34,7 @@
             align-items: center;
             text-align: center;
             color: white;
+            padding: 2rem;
         }
 
         .hero-text {
@@ -55,11 +56,42 @@
             font-weight: 700;
             box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
+            margin-bottom: 2rem;
         }
 
         .btn-cta:hover {
             transform: scale(1.05);
             box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .gif-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gif-item {
+            text-align: center;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .gif-container img {
+            width: 450px; /* Increase the width of the GIFs */
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .gif-container p {
+            color: white;
+            font-size: 1rem;
+            margin: 0;
+            word-wrap: break-word;
+            max-width: 350px;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -71,6 +103,22 @@
         <h1 class="hero-text">Design Your Space with Ease</h1>
         <p class="hero-subtext">Upload your floor plan and start planning your dream interior.</p>
         <a href="design.html" class="btn-cta">Get Started</a>
+
+        <!-- GIFs Highlighting the Functionality -->
+        <div class="gif-container">
+            <div class="gif-item">
+                <img src="gifs/showcase-1.gif" alt="Add scale to floor plan">
+                <p>Add scale to the floor plan for accurate size representation</p>
+            </div>
+            <div class="gif-item">
+                <img src="gifs/showcase-2.gif" alt="Add new furniture">
+                <p>Add new furniture in metric scale for realistic sizes</p>
+            </div>
+            <div class="gif-item">
+                <img src="gifs/showcase-3.gif" alt="Copy and delete furniture">
+                <p>Copy, paste and delete furniture</p>
+            </div>
+        </div>
     </div>
 
     <!-- Include AOS for animations -->

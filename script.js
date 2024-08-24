@@ -156,21 +156,21 @@ addFurnitureBtn.addEventListener('click', () => {
 
     const furnitureName = document.getElementById('furnitureName').value.trim();
     const furnitureWidthMeters = parseFloat(document.getElementById('furnitureWidth').value);
-    const furnitureHeightMeters = parseFloat(document.getElementById('furnitureHeight').value);
+    const furnitureLengthMeters = parseFloat(document.getElementById('furnitureLength').value);
 
-    if (isNaN(furnitureWidthMeters) || isNaN(furnitureHeightMeters)) {
+    if (isNaN(furnitureWidthMeters) || isNaN(furnitureLengthMeters)) {
         alert("Please enter valid furniture dimensions.");
         return;
     }
 
     const furnitureWidthPixels = furnitureWidthMeters * scaleFactor;
-    const furnitureHeightPixels = furnitureHeightMeters * scaleFactor;
+    const furnitureLengthPixels = furnitureLengthMeters * scaleFactor;
 
     const rect = new Konva.Rect({
         x: stage.width() / 2 - furnitureWidthPixels / 2,
-        y: stage.height() / 2 - furnitureHeightPixels / 2,
+        y: stage.height() / 2 - furnitureLengthPixels / 2,
         width: furnitureWidthPixels,
-        height: furnitureHeightPixels,
+        height: furnitureLengthPixels,
         fill: '#60A5FA',
         stroke: 'black',
         strokeWidth: 1,
@@ -181,7 +181,7 @@ addFurnitureBtn.addEventListener('click', () => {
     if (furnitureName) {
         // Calculate the maximum font size that fits the width and height
         const maxWidthFontSize = furnitureWidthPixels / furnitureName.length * 1.5;
-        const maxHeightFontSize = furnitureHeightPixels * 0.8;
+        const maxHeightFontSize = furnitureLengthPixels * 0.8;
         const fontSize = Math.min(maxWidthFontSize, maxHeightFontSize);
 
         // Ensure text does not exceed the width, adjusting for two lines if necessary

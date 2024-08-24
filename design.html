@@ -64,16 +64,25 @@
                     <input type="text" id="furnitureName" placeholder="e.g. Sofa">
                 </label>
                 <label for="furnitureWidth">
-                    <span>Length in meters</span>
+                    <span class="dimension-label">
+                        <img src="icons/arrow-left-right.svg" alt="Width Icon" class="dimension-icon">
+                        Width in meters
+                    </span>
                     <input type="number" id="furnitureWidth" step="0.1" placeholder="e.g. 2">
                 </label>
-                <label for="furnitureHeight">
-                    <span>Width in meters</span>
-                    <input type="number" id="furnitureHeight" step="0.1" placeholder="e.g. 1">
+                <label for="furnitureLength">
+                    <span class="dimension-label">
+                        <img src="icons/arrow-up-down.svg" alt="Length Icon" class="dimension-icon">
+                        Length in meters
+                    </span>
+                    <input type="number" id="furnitureLength" step="0.1" placeholder="e.g. 1">
                 </label>
             </div>
             <button id="addFurnitureBtn" class="btn">Add Furniture</button>
         </div>
+        
+
+
     </div>
 
     <!-- Include Konva.js -->

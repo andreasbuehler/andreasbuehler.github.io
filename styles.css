@@ -239,3 +239,15 @@ body {
     visibility: visible;
     opacity: 1;
 }
+
+/* Ensure the icon and text are inline */
+.dimension-label {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dimension-icon {
+    width: 16px; /* Adjust the size of the icons */
+    height: 16px;
+    margin-right: 5px; /* Add some space between the icon and text */
+}

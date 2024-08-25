@@ -58,29 +58,50 @@
 
         <!-- Furniture Controls Section -->
         <div id="furnitureControls" class="controls-wrapper">
-            <div class="furniture-controls">
+            <div class="name-box">
                 <label for="furnitureName">
                     <span>Furniture name</span>
                     <input type="text" id="furnitureName" placeholder="e.g. Sofa">
                 </label>
-                <label for="furnitureWidth">
-                    <span class="dimension-label">
-                        <img src="icons/arrow-left-right.svg" alt="Width Icon" class="dimension-icon">
-                        Width in meters
-                    </span>
-                    <input type="number" id="furnitureWidth" step="0.1" placeholder="e.g. 2">
-                </label>
-                <label for="furnitureLength">
-                    <span class="dimension-label">
-                        <img src="icons/arrow-up-down.svg" alt="Length Icon" class="dimension-icon">
-                        Length in meters
-                    </span>
-                    <input type="number" id="furnitureLength" step="0.1" placeholder="e.g. 1">
-                </label>
             </div>
-            <button id="addFurnitureBtn" class="btn">Add Furniture</button>
+        
+            <div class="furniture-option">
+                <div class="furniture-controls">
+                    <label for="furnitureWidth">
+                        <span class="dimension-label">
+                            <img src="icons/arrow-left-right.svg" alt="Width Icon" class="dimension-icon">
+                            Width in meters
+                        </span>
+                        <input type="number" id="furnitureWidth" step="0.1" placeholder="e.g. 2">
+                    </label>
+                    <label for="furnitureLength">
+                        <span class="dimension-label">
+                            <img src="icons/arrow-up-down.svg" alt="Length Icon" class="dimension-icon">
+                            Length in meters
+                        </span>
+                        <input type="number" id="furnitureLength" step="0.1" placeholder="e.g. 1">
+                    </label>
+                </div>
+                <button id="addRectangularFurnitureBtn" class="btn">Add Rectangular Furniture</button>
+            </div>
+        
+            <div class="furniture-option">
+                <div class="furniture-controls">
+                    <label for="furnitureDiameter">
+                        <span class="dimension-label">
+                            <img src="icons/circle-diameter.svg" alt="Diameter Icon" class="dimension-icon">
+                            Diameter in meters
+                        </span>
+                        <input type="number" id="furnitureDiameter" step="0.1" placeholder="e.g. 1.5">
+                    </label>
+                </div>
+                <button id="addRoundFurnitureBtn" class="btn">Add Round Furniture</button>
+            </div>
         </div>
         
+        
+
+
 
 
     </div>

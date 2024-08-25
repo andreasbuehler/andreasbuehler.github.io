@@ -28,7 +28,7 @@ body {
     max-width: 1200px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start; /* Align items at the top */
     gap: 2rem;
     padding: 1rem;
 }
@@ -40,7 +40,7 @@ body {
     background-color: white;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    height: 600px;
+    height: 600px; /* Ensure consistent height for alignment */
     max-width: 800px;
     overflow: hidden;
     display: flex;
@@ -146,32 +146,55 @@ body {
 }
 
 .controls-wrapper {
+    display: none; /* Initially hide the controls */
+    flex-direction: column;
+    justify-content: space-between; /* Aligns top and bottom content */
+    height: 600px; /* Match the height of the floor plan container */
     max-width: 300px;
     width: 100%;
-    display: none;
-    flex-direction: column;
-    justify-content: start;
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Keep the background color */
     padding: 1.5rem;
+    border: none;
+    box-shadow: none;
 }
 
 .controls-wrapper.active {
-    display: block;
+    display: flex; /* Show the controls when active */
 }
 
-.furniture-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.name-box {
+    background-color: #f9fafb;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid #D1D5DB; /* Light gray border */
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.name-box input[type="text"] {
+    width: 100%; /* Ensure the input fits within the box */
+    padding: 0.5rem; /* Adjust padding for a better fit */
+    border: 1px solid #D1D5DB;
+    border-radius: 0.375rem;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.furniture-option {
+    background-color: #f9fafb;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    /* Add border and shadow to individual sections */
+    border: 2px solid #D1D5DB; /* Light gray border */
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .furniture-controls label {
-    flex-basis: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    margin-bottom: 0.75rem; /* Slightly reduce spacing between inputs */
+}
+
+#addRectangularFurnitureBtn, #addRoundFurnitureBtn {
+    margin-top: 1rem; /* Ensure there's space between inputs and buttons */
 }
 
 .furniture-controls label span {

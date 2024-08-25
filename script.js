@@ -287,7 +287,12 @@ function selectFurniture(shape, text) {
 
 // Handle keyboard events for copy, paste, and delete
 window.addEventListener('keydown', (e) => {
-    if (selectedFurniture) {
+    // Check if the focused element is an input field
+    const activeElement = document.activeElement;
+    const isTextInput = (activeElement.tagName === 'INPUT' && 
+                        (activeElement.type === 'text' || activeElement.type === 'number'));
+
+    if (selectedFurniture && !isTextInput) {
         if (e.key === 'Delete' || e.key === 'Backspace') {
             selectedFurniture.shape.destroy();
             if (selectedFurniture.text) {
